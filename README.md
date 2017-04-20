@@ -1,27 +1,4 @@
 <html>
-  <head>
-    <style type="text/css">
-      code {
-        color: blue;
-        font-weight: bold;
-      }
-      pre {
-        font-weight: bold;
-        background: #ddd;
-        border: 1px solid #666;
-        padding: 10px;
-      }
-      pre .nt {
-        color: #b18500;
-      }
-      pre .na {
-        color: #c423cc;
-      }
-      pre .s {
-        color: #5d4aa2;
-      }
-    </style>
-  </head>
   <body>
     <section id="qPlate">
         <h2>qPlate</h2>
@@ -669,7 +646,7 @@
             <tr>
               <td>
                 <p>
-                  <code>bookstore/*/title</code>
+                  <code>bookstore/\*/title</code>
                 </p>
               </td>
               <td>
@@ -699,7 +676,7 @@
             <tr>
               <td>
                 <p>
-                  <code>author/*</code>
+                  <code>author/\*</code>
                 </p>
               </td>
               <td>
@@ -709,7 +686,7 @@
             <tr>
               <td>
                 <p>
-                  <code>book/*/last-name</code>
+                  <code>book/\*/last-name</code>
                 </p>
               </td>
               <td>
@@ -719,7 +696,7 @@
             <tr>
               <td>
                 <p>
-                  <code>*/*</code>
+                  <code>\*/\*</code>
                 </p>
               </td>
               <td>
@@ -729,7 +706,7 @@
             <tr>
               <td>
                 <p>
-                  <code>*[@specialty]</code>
+                  <code>\*[@specialty]</code>
                 </p>
               </td>
               <td>
@@ -789,7 +766,7 @@
             <tr>
               <td>
                 <p>
-                  <code>@*</code>
+                  <code>@\*</code>
                 </p>
               </td>
               <td>
@@ -849,7 +826,7 @@
             <tr>
               <td>
                 <p>
-                  <code>my:*</code>
+                  <code>my:\*</code>
                 </p>
               </td>
               <td>
@@ -859,7 +836,7 @@
             <tr>
               <td>
                 <p>
-                  <code>@my:*</code>
+                  <code>@my:\*</code>
                 </p>
               </td>
               <td>
@@ -1081,7 +1058,7 @@
             <tr>
               <td>
                 <p>
-                  <code>degree[@from *= "arva"]</code>
+                  <code>degree[@from \*= "arva"]</code>
                 </p>
               </td>
               <td>
@@ -1151,7 +1128,7 @@
             <tr>
               <td>
                 <p>
-                  <code>author[* = "Bob"]</code>
+                  <code>author[\* = "Bob"]</code>
                 </p>
               </td>
               <td>
