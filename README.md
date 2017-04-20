@@ -1216,5 +1216,3 @@
     </section>
   </body>
 </html>
-
-{:/}
