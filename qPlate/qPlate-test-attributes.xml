@@ -1,0 +1,63 @@
+<templates>
+    <t t-name="static">
+        <div foo="a" bar="b" baz="c"/>
+    </t>
+    <result id="static"><![CDATA[<div foo="a" bar="b" baz="c"></div>]]></result>
+
+    <t t-name="static-void">
+        <img src="/test.jpg"/>
+    </t>
+    <result id="static-void"><![CDATA[<img src="/test.jpg"/>]]></result>
+
+    <t t-name="fixed-literal">
+        <div foo="{{'bar'}}"/>
+    </t>
+    <result id="fixed-literal"><![CDATA[<div foo="bar"></div>]]></result>
+
+    <t t-name="fixed-variable">
+        <div foo="{{value}}"/>
+    </t>
+    <params id="fixed-variable">{"value": "ok"}</params>
+    <result id="fixed-variable"><![CDATA[<div foo="ok"></div>]]></result>
+    <t t-name="format-literal">
+        <div foo="bar"/>
+    </t>
+    <result id="format-literal"><![CDATA[<div foo="bar"></div>]]></result>
+
+    <t t-name="format-value">
+        <div foo="b{{value}}r"/>
+    </t>
+    <params id="format-value">{"value": "a"}</params>
+    <result id="format-value"><![CDATA[<div foo="bar"></div>]]></result>
+
+    <t t-name="format-expression">
+        <div foo="{{value + 37}}"/>
+    </t>
+    <params id="format-expression">{"value": 5}</params>
+    <result id="format-expression"><![CDATA[<div foo="42"></div>]]></result>
+
+    <t t-name="format-multiple">
+        <div foo="a {{value1}} is {{value2}} of {{value3}} ]"/>
+    </t>
+    <params id="format-multiple">{
+        "value1": 0,
+        "value2": 1,
+        "value3": 2
+    }</params>
+    <result id="format-multiple"><![CDATA[
+        <div foo="a 0 is 1 of 2 ]"></div>
+    ]]></result>
+
+    <t t-name="various-escapes">
+        <div foo="&lt;foo"
+             bar="{{bar}}"
+             baz="&lt;{{baz}}&gt;"/>
+    </t>
+    <params id="various-escapes"><![CDATA[{
+        "bar": "<bar>",
+        "baz": "\"<baz>\""
+    }]]></params>
+    <result id="various-escapes"><![CDATA[
+        <div foo="&lt;foo" bar="&lt;bar&gt;" baz="&lt;&quot;&lt;baz&gt;&quot;&gt;"></div>
+    ]]></result>
+</templates>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/lib/qunit/qunit.css" type="text/css" media="screen"/>
+    <script type="text/javascript" src="/static/lib/qunit/qunit.js"></script>
+    <script type="text/javascript" src="/static/lib/qunit/load.js"></script>
+    <script type="text/javascript" src="qPlate.js"></script>
+    <script>
+        "use strict";
+        var qp = new qPlate.Engine();
+        function trim(s) {
+            return (s + '').replace(/(^\s+|\s+$)/g, '');
+        }
+        function render(template, context) {
+            return trim(qp.render(template, context)).toLowerCase();
+        }
+
+        /**
+         * Loads the template file, and executes all the test template in a
+         * qunit module $title
+         */
+        function test(title, templateUrl) {
+            QUnit.test(title, function (assert) {
+                var qp = new qPlate.Engine();
+                var xml = load(templateUrl);
+                var arch = qp.addTemplate(xml);
+
+                var templates = qp.templates;
+                for (var template in templates) {
+                    if (!templates.hasOwnProperty(template)) { continue; }
+                    // ignore templates whose name starts with _, they're
+                    // helpers/internal
+                    if (/^_/.test(template)) { continue; }
+
+                    var fn;
+                    var args = {};
+                    var results;
+                    for (var k in arch.descendant) {
+                        var node = arch.descendant[k];
+                        if (node.tagName === "params" && node.attributes.id + '' === template) {
+                            args = JSON.parse(node.childNodes[0].content || '{}');
+                        }
+                        if (node.tagName === "result" && node.attributes.id + '' === template) {
+                            results = node;
+                        }
+                    }
+
+                    assert.equal(
+                        trim(qp.render(template, args)),
+                        trim(results && results.innerHTML()),
+                        template + (results.attributes.string ? ': ' + results.attributes.string : '' ));
+                }
+            });
+        }
+        DOMContentLoaded(function() {
+            test("Attributes manipulation", 'qPlate-test-attributes.xml');
+            test("Template calling (to the faraway pages)", 'qPlate-test-call.xml');
+            test("Conditionals", 'qPlate-test-conditionals.xml');
+            test("Foreach", 'qPlate-test-foreach.xml');
+            test("Output", 'qPlate-test-output.xml');
+            test("Context-setting", 'qPlate-test-set.xml');
+            test("utf8", 'qPlate-test-utf8tags.xml');
+            test("Global", 'qPlate-test-global.xml');
+            test('Template inheritance', 'qPlate-test-extend.xml');
+        });
+    </script>
+
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+</body>
+</html>

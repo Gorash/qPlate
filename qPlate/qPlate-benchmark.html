@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="qPlate.js"></script>
+    <script type="text/javascript" src="qPlate.js"></script>
+    <script type="text/javascript">
+    (function (c) {
+        if (c.time) { return; }
+        var d = {};
+        c.time = function (key) {
+            d[key] = Date.now();
+        };
+        c.timeEnd = function (key) {
+            var end = Date.now(),
+                origin = d[key];
+            delete d[key];
+            if (!origin) { return; }
+            console.log(key + ': ' + (end - origin) + 'ms');
+        };
+    })(window.console);
+    var dict = {
+        session : true,
+        testing : 'yes',
+        name : 'AGR'
+    };
+    console.time("Load template with qPlate");
+    qPlate.add_template("qPlate-benchmark.xml");
+    console.timeEnd("Load template with qPlate");
+
+    console.time("Load template with qPlate");
+    var engine = new qPlate.Engine("qPlate-benchmark.xml")
+    engine.debug = true;
+    console.timeEnd("Load template with qPlate")
+
+    var iter = 1000;
+    console.log("Rendering...");
+    console.time("Render " + iter + " templates with qPlate");
+    for (var i = 0; i < iter; i++) {
+        var qPlate = qPlate.render('benchmark', dict);
+    }
+    console.timeEnd("Render " + iter + " templates with qPlate");
+
+    console.time("Render " + iter + " templates with qPlate");
+    for (var i = 0; i < iter; i++) {
+        var qPlate = engine.render('benchmark', dict);
+    }
+    console.timeEnd("Render " + iter + " templates with qPlate");
+    </script>
+</head>
+
+<body>
+Please, check your console for results
+</body>
+
+</html>
+

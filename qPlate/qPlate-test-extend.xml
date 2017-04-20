@@ -1,0 +1,174 @@
+<templates>
+    <t t-name="_xpath-basic">
+        <root>
+            <section id="1">
+                <title>title-0</title>
+                <resume>
+                    <title>title-1</title>
+                    text-node-1
+                    <span name="bof">a</span>
+                    text-node-2
+                </resume>
+                text-node-3
+                <span name="pif">b</span>
+                <span>c</span>
+            </section>
+        </root>
+    </t>
+
+    <t t-name="xpath-axe-basic" t-extend="_xpath-basic">
+        <t t-xpath='/root/section/title' t-operation="replace">delete-title</t>
+        <t t-xpath='//title/../span' t-operation="replace"><go-parent/></t>
+        <t t-xpath='//title/../go-parent' t-operation="replace"><go-parent-2/></t>
+        <t t-xpath='//title' t-operation="replace"><deep-title/></t>
+    </t>
+
+    <result id="xpath-axe-basic" string="axe descendant, child and parent"><![CDATA[
+        <root>
+            <section id="1">
+                delete-title
+                <resume>
+                    <deep-title></deep-title>
+                    text-node-1
+                    <go-parent-2></go-parent-2>
+                    text-node-2
+                </resume>
+                text-node-3
+                <span name="pif">b</span>
+                <span>c</span>
+            </section>
+        </root>
+]]></result>
+
+    <t t-name="xpath-axe-attribute" t-extend="_xpath-basic">
+        <t t-xpath='/root/section/@id' t-operation="replace">replace-id</t>
+        <t t-xpath='//span[not(@name)]' t-operation="after">not-attribute</t>
+        <t t-xpath='//span/@name' t-operation="replace">replace-name</t>
+        <t t-xpath='//section/resume/@new-one' t-operation="replace">replace-empty</t>
+        <t t-xpath='//section/span[last()]@name' t-operation="replace">add name to test filter</t>
+        <t t-xpath='//section/span[@name%="replace%"]' t-operation="replace"><h1>filter by attribute &amp; replace</h1></t>
+    </t>
+
+    <result id="xpath-axe-attribute" string="search with attributes and replace"><![CDATA[
+        <root>
+            <section id="replace-id">
+                <title>title-0</title>
+                <resume new-one="replace-empty">
+                    <title>title-1</title>
+                    text-node-1
+                    <span name="replace-name">a</span>
+                    text-node-2
+                </resume>
+                text-node-3
+                <h1>filter by attribute &amp; replace</h1>
+                <span name="add name to test filter">c</span>not-attribute
+            </section>
+        </root>
+]]></result>
+
+    <t t-name="_xpath-operation">
+        <root>
+            <section id="1">
+            </section>
+        </root>
+    </t>
+
+    <t t-name="xpath-operation" t-extend="_xpath-operation">
+        <t t-xpath='//section' t-operation="replace"><replace>x</replace></t>
+        <t t-xpath='//replace' t-operation="inner">a<inner>b</inner>c</t>
+        <t t-xpath='//replace' t-operation="append"><append/></t>
+        <t t-xpath='//replace' t-operation="prepend"><prepend/></t>
+        <t t-xpath='//inner' t-operation="before"><before/></t>
+        <t t-xpath='//inner' t-operation="after"><after/></t>
+    </t>
+    <result id="xpath-operation" string="replace,inner,append,prepend,before,after"><![CDATA[
+        <root>
+            <replace><prepend></prepend>a<before></before><inner>b</inner><after></after>c<append></append></replace>
+        </root>
+]]></result>
+
+    <t t-name="xpath-operation-attributes" t-extend="_xpath-operation">
+        <t t-xpath='//root/@falló' t-operation="replace">{{'agüero'}}</t>
+        <t t-xpath='//root/@falló' t-operation="append"> append</t>
+        <t t-xpath='//root/@falló' t-operation="prepend">prepend </t>
+
+        <t t-xpath='//section/@first' t-operation="replace"><replace a='a' b="b">x</replace></t>
+        <t t-xpath='//section/@first' t-operation="append"> append</t>
+        <t t-xpath='//section/@first' t-operation="prepend">prepend </t>
+    </t>
+    <result id="xpath-operation-attributes" string="replace,append,prepend"><![CDATA[
+        <root falló="prepend agüero append">
+            <section id="1" first="prepend &lt;replace a=&quot;a&quot; b=&quot;b&quot;&gt;x&lt;/replace&gt; append">
+            </section>
+        </root>
+]]></result>
+
+    <t t-name="_xpath-extend">
+        <ul>
+            <ol>
+                <a href="#1">link 1</a>
+                <ul>
+                    <li><a href="#1a">link 1 a</a></li>
+                    <li><a href="#1b">link 1 b</a></li>
+                    <li><a href="#1c">link 1 c</a></li>
+                </ul>
+            </ol>
+            <ol>
+                <title>link 2 title</title>
+                <a href="#2">link 2</a>
+                <ul>
+                    <li><a href="#2a">link 2 a</a></li>
+                    <li><a href="#2b">link 2 b</a></li>
+                    <li><a href="#2c">link 2 c</a></li>
+                </ul>
+            </ol>
+            <ol>
+                <a href="#3">link 3</a>
+                <ul>
+                    <li><a href="#3a">link 3 a</a></li>
+                    <li><a href="#3b">link 3 b</a></li>
+                    <li><a href="#3c">link 3 c</a></li>
+                </ul>
+            </ol>
+        </ul>
+    </t>
+
+    <t t-name="xpath-complexe" t-extend="_xpath-extend">
+        <t t-xpath='//ol[(ul[li *= "1 b"] or title)]/ul' t-operation="append"><li><a href="#text-search-append">link 1 d</a></li></t>
+    </t>
+    <t t-extend="xpath-complexe">
+        <t t-xpath='/ul' t-operation="append">append</t>
+        <t t-xpath='//a[@href="#1b"]/../../li[last()]/a' t-operation="inner">attribute-then-last</t>
+        <t t-xpath='/ul/(ol/ul/li)[9]/a/@href' t-operation="replace">#use-group</t>
+    </t>
+    <result id="xpath-complexe" string="operation, compare, group..."><![CDATA[
+        <ul>
+            <ol>
+                <a href="#1">link 1</a>
+                <ul>
+                    <li><a href="#1a">link 1 a</a></li>
+                    <li><a href="#1b">link 1 b</a></li>
+                    <li><a href="#1c">link 1 c</a></li>
+                <li><a href="#text-search-append">attribute-then-last</a></li></ul>
+            </ol>
+            <ol>
+                <title>link 2 title</title>
+                <a href="#2">link 2</a>
+                <ul>
+                    <li><a href="#2a">link 2 a</a></li>
+                    <li><a href="#2b">link 2 b</a></li>
+                    <li><a href="#2c">link 2 c</a></li>
+                <li><a href="#text-search-append">link 1 d</a></li></ul>
+            </ol>
+            <ol>
+                <a href="#3">link 3</a>
+                <ul>
+                    <li><a href="#3a">link 3 a</a></li>
+                    <li><a href="#use-group">link 3 b</a></li>
+                    <li><a href="#3c">link 3 c</a></li>
+                </ul>
+            </ol>
+        append</ul>
+]]></result>
+
+</templates>
