@@ -553,7 +553,6 @@
             </dd>
         </dl>
     </section>
-
     <section id="XPath">
       <h2>XPath</h2>
       <small>See also http://jean-luc.massat.perso.luminy.univ-amu.fr/ens/xml/04-xpath.html</small>
