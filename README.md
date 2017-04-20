@@ -1,4 +1,27 @@
 <html>
+  <head>
+    <style type="text/css">
+      code {
+        color: blue;
+        font-weight: bold;
+      }
+      pre {
+        font-weight: bold;
+        background: #ddd;
+        border: 1px solid #666;
+        padding: 10px;
+      }
+      pre .nt {
+        color: #b18500;
+      }
+      pre .na {
+        color: #c423cc;
+      }
+      pre .s {
+        color: #5d4aa2;
+      }
+    </style>
+  </head>
   <body>
     <section id="qPlate">
         <h2>qPlate</h2>
@@ -843,9 +866,7 @@
                 <p>All attributes from the <code>my</code> namespace (this does not include unqualified attributes on elements from the <code>my</code> namespace).</p>
               </td>
             </tr>
-          
             <tr><td colspan="2"><h3>------------</h3></td></tr>
-
             <tr>
               <td>
                 <p>
@@ -886,9 +907,7 @@
                 <p>The second <code>&lt;y&gt;</code> child of the first <code>&lt;x&gt;</code>.</p>
               </td>
             </tr>
-
             <tr><td colspan="2"><h3>------------</h3></td></tr>
-
             <tr>
               <td>
                 <p>
