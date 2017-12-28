@@ -461,9 +461,7 @@
     <span class="nt">&lt;t</span> <span class="na">t-xpath=</span><span class="s">"//ul"</span> <span class="na">t-operation=</span><span class="s">"append"</span><span class="nt">&gt;</span>
         <span class="nt">&lt;li&gt;</span>new element<span class="nt">&lt;/li&gt;</span>
     <span class="nt">&lt;/t&gt;</span>
-    <span class="nt">&lt;t</span> <span class="na">t-xpath=</span><span class="s">"//ul/li/@name"</span> <span class="na">t-operation=</span><span class="s">"replace"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;li&gt;</span>attribute value<span class="nt">&lt;/li&gt;</span>
-    <span class="nt">&lt;/t&gt;</span>
+    <span class="nt">&lt;t</span> <span class="na">t-xpath=</span><span class="s">"//ul/li/@name"</span> <span class="na">t-operation=</span><span class="s">"replace"</span><span class="nt">&gt;</span><span class="nt">attribute value<span class="nt">&lt;/t&gt;</span>
 <span class="nt">&lt;/t&gt;</span>
 </pre>
             </div>
