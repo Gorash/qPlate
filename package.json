@@ -1,0 +1,27 @@
+{
+  "name": "qPlate",
+  "version": "1.0.0",
+  "description": "XML/HTML templating engine for browsers & nodejs (use xpath for view heritage)",
+  "keywords": [
+    "template",
+    "engine",
+    "rendering",
+    "xml",
+    "xpath",
+    "server",
+    "client",
+    "browser"
+  ],
+  "engines": {
+    "node": ">= v0.6.16"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Gorash/qPlate.git"
+  },
+  "author": {
+    "name": "Christophe Matthieu",
+    "email": "tof.matthieu@gmail.com"
+  },
+  "license": "MIT"
+}
