@@ -1,5 +1,5 @@
 {
-  "name": "qPlate",
+  "name": "qplate",
   "version": "1.0.0",
   "description": "XML/HTML templating engine for browsers & nodejs (use xpath for view heritage)",
   "keywords": [
@@ -19,9 +19,14 @@
     "type": "git",
     "url": "git://github.com/Gorash/qPlate.git"
   },
-  "author": {
-    "name": "Christophe Matthieu",
-    "email": "tof.matthieu@gmail.com"
+  "author": "Christophe Matthieu <tof.matthieu@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Gorash/qPlate/issues"
   },
-  "license": "MIT"
+  "homepage": "https://github.com/Gorash/qPlate#readme",
+  "main": "qPlate/qPlate.js",
+  "scripts": {
+    "test": "look qPlate-test.js.html page"
+  }
 }
