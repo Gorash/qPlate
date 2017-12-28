@@ -23,6 +23,8 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER I
 AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
+(function(module) {
+"use strict";
 
 var qPlate = {
     expressions_cache: { },
@@ -199,7 +201,7 @@ qPlate.tools.parse = (function() {
         this.parentNode = parentNode;
         this.nodeType = nodeType;
         this.tagName = tagName;
-        this.content = content || null;
+        this.content = typeof content === 'string' ? content : null;
         this.childNodes = new Collection();
         this.attributes = {};
     }
@@ -364,7 +366,7 @@ qPlate.tools.parse = (function() {
                     node = path[path.length-1];
 
                     if (node.tagName.toLowerCase() !== tag.toLowerCase()) {
-                        qPlate.tools.exception("Invalid XML tags: '"+node.tag+"' != '"+tag[0]+"'");
+                        qPlate.tools.exception("Invalid XML tags: '"+node.tagName+"' != '"+tag[0]+"'");
                     }
 
                     var attributes = parseAttributes(tagAll.slice(tag.length));
@@ -396,6 +398,14 @@ qPlate.tools.parse = (function() {
                     k += 2;
                     path[path.length-1].childNodes.push(
                         new Node(path[path.length-1], 3, null, comment)
+                    );
+                } else if (template[k] === "!" && template.substr(k, 8).toLowerCase() === "!doctype") { // text cdata
+                    while(template[k] && template[k] !== ">") {
+                        tagAll += template[k];
+                        k++;
+                    }
+                    path[path.length-1].childNodes.push(
+                        new Node(path[path.length-1], 3, null, "<" + tagAll + ">")
                     );
                 } else { // open tag
                     var xmlNode = template[k] === "?";
@@ -445,10 +455,6 @@ qPlate.tools.parse = (function() {
     // END PARSING DOM
 
     // XPATH
-    /*
-    //section[(author[last-name[position()=1] = "Bob"] or title) and not((resume/child-resume)[1][@name="bof"])]
-    */
-    // http://jean-luc.massat.perso.luminy.univ-amu.fr/ens/xml/04-xpath.html
 
     Node.prototype.xpath = function (xpath) {
         var t = Date.now();
@@ -1261,8 +1267,8 @@ qPlate.tools.parse = (function() {
 })();
 
 qPlate.Engine = (function() {
-    function Engine(prefix) {
-        this.prefix = prefix ? prefix.toLowerCase() : 't';
+    function Engine() {
+        this.prefix = 't';
         this.debug = false;
         this.templates = {};
         this.compiled_templates = {};
@@ -1275,7 +1281,6 @@ qPlate.Engine = (function() {
         this.word_replacement = qPlate.tools.extend({}, qPlate.WORD_REPLACEMENT);
         this.preprocess_node = null;
     }
-
     qPlate.tools.extend(Engine.prototype, {
         /**
          * Add a template to the engine
@@ -1374,7 +1379,8 @@ qPlate.Engine = (function() {
             for (var i = 0; i < arch.descendant.length; i++) {
                 var node = arch.descendant[i];
                 var attr = node.attributes;
-                if ('t-elif' in attr || 't-else' in attr) {
+                if ((attr['t-elif'] && attr['t-elif'].content !== null) ||
+                    (attr['t-else'] && attr['t-else'].content !== null)) {
                     tbranch.push(node);
                 }
             }
@@ -1445,10 +1451,10 @@ qPlate.Engine = (function() {
                     if (this.debug && window.console) {
                         console.log(code);
                     }
-                    this.tools.exception("Error evaluating template: " + error, { template: name });
+                    this.tools.exception("Error evaluating template: " + error, { template: template });
                 }
                 if (!tcompiled) {
-                    this.tools.exception("Error evaluating template: (IE?)" + error, { template: name });
+                    this.tools.exception("Error evaluating template: (IE?)" + error, { template: template });
                 }
                 this.compiled_templates[template] = tcompiled;
                 return this.render(template, dict);
@@ -1764,9 +1770,9 @@ qPlate.Element = (function() {
         },
         compile_action_call : function(value) {
             if (this.children.length === 0) {
-                return this.top("r.push(context.engine.tools.call(context, " + (this.engine.tools.js_escape(value)) + ", dict));");
+                return this.top("r.push(context.engine.tools.call(context, " + (this.string_interpolation(value)) + ", dict));");
             } else {
-                this.top("r.push(context.engine.tools.call(context, " + (this.engine.tools.js_escape(value)) + ", dict, null, function(context, dict) {");
+                this.top("r.push(context.engine.tools.call(context, " + (this.string_interpolation(value)) + ", dict, null, function(context, dict) {");
                 this.bottom("}));");
                 this.indent();
                 this.top("var r = [];");
@@ -1829,3 +1835,8 @@ qPlate.Element = (function() {
     });
     return Element;
 })();
+
+
+if(typeof module.exports !== 'undefined') module.exports = qPlate;
+return module.qPlate = qPlate;
+})(typeof module === 'undefined' ? this : module);
